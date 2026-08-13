@@ -104,12 +104,7 @@ export function Footer({
       <div className="border-t border-slate-100 dark:border-white/5">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-6 text-xs text-slate-400 sm:px-6 md:flex-row lg:px-8">
           <p>{copyright}</p>
-          <div className="flex items-center gap-6">
-            {icp ? <span>{icp}</span> : null}
-            <Link href="/admin" className="hover:text-blue-600 dark:hover:text-cyan-400">
-              管理后台
-            </Link>
-          </div>
+          {icp ? <div className="flex items-center gap-6">{icp}</div> : null}
         </div>
       </div>
     </footer>
