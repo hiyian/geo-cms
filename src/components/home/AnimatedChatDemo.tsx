@@ -50,9 +50,9 @@ export function AnimatedChatDemo({ demos, autoPlayMs = 9000 }: Props) {
   if (!scene) return null;
 
   return (
-    <div className="relative w-full max-w-[520px]">
-      <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/90 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-linear-to-br dark:from-navy-800/95 dark:via-navy-900/98 dark:to-navy-950/95">
-        <div className="flex items-center justify-between border-b border-slate-100 bg-gradient-to-r from-orange-50 to-amber-50 px-5 py-3.5 dark:border-white/5 dark:from-purple-900/20 dark:to-pink-900/20">
+    <div className="relative h-[560px] w-full max-w-[520px]">
+      <div className="flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white/90 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-linear-to-br dark:from-navy-800/95 dark:via-navy-900/98 dark:to-navy-950/95">
+        <div className="flex shrink-0 items-center justify-between border-b border-slate-100 bg-gradient-to-r from-orange-50 to-amber-50 px-5 py-3.5 dark:border-white/5 dark:from-purple-900/20 dark:to-pink-900/20">
           <div className="flex items-center gap-3">
             <motion.div
               key={`${scene.id}-avatar`}
@@ -85,8 +85,8 @@ export function AnimatedChatDemo({ demos, autoPlayMs = 9000 }: Props) {
           </div>
         </div>
 
-        <div className="flex h-[420px] flex-col">
-          <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-5 pb-3">
+        <div className="flex min-h-0 flex-1 flex-col">
+          <div className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-5 pb-3">
             <AnimatePresence mode="wait">
               <motion.div
                 key={scene.id}
