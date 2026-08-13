@@ -118,52 +118,6 @@ export function HomePageView({
         </div>
       </section>
 
-      {/* GEO Covers - geook style */}
-      <section className="relative py-24 dark:bg-navy-900">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <FadeIn className="mb-14 text-center">
-            <div className="mb-3 text-sm font-semibold tracking-wide text-blue-600 uppercase dark:text-cyan-400">
-              {servicesSection.badge}
-            </div>
-            <h2 className="mb-4 text-3xl font-bold text-slate-900 md:text-5xl dark:text-white">
-              {servicesSection.title}
-            </h2>
-            <p className="mx-auto max-w-3xl text-lg text-slate-500 dark:text-slate-400">
-              {servicesSection.subtitle}
-            </p>
-          </FadeIn>
-
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {servicesSection.covers.map((cover, idx) => (
-              <FadeIn key={cover.title} delay={idx * 0.05}>
-                <div className="h-full rounded-2xl border border-slate-200 bg-slate-50 p-7 transition hover:-translate-y-1 hover:border-blue-300 hover:shadow-xl dark:border-white/10 dark:bg-navy-800/50 dark:hover:border-cyan-400/40">
-                  <div className="mb-3 text-sm font-bold text-blue-600 dark:text-cyan-400">
-                    0{idx + 1}
-                  </div>
-                  <h3 className="mb-3 text-xl font-bold text-slate-900 dark:text-white">
-                    {cover.title}
-                  </h3>
-                  <p className="mb-5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
-                    {cover.description}
-                  </p>
-                  <ul className="space-y-2">
-                    {cover.features.map((f) => (
-                      <li
-                        key={f}
-                        className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400"
-                      >
-                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue-500 dark:text-cyan-400" />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Pain */}
       <section className="relative overflow-hidden bg-slate-50 py-28 dark:bg-navy-800">
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -220,60 +174,6 @@ export function HomePageView({
               );
             })}
           </div>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-14 text-center">
-            <h2 className="mb-4 text-3xl font-bold text-slate-900 md:text-5xl dark:text-white">
-              {stats.titleBefore}{" "}
-              <span className="accent-gradient">{stats.titleHighlight}</span>{" "}
-              {stats.titleAfter}
-            </h2>
-            <p className="text-lg text-slate-500 dark:text-slate-400">{stats.subtitle}</p>
-          </div>
-          <div className="mb-12 grid grid-cols-2 gap-6 md:grid-cols-4">
-            {stats.items.map((item, idx) => (
-              <FadeIn key={item.label} delay={idx * 0.05}>
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center dark:border-white/5 dark:bg-navy-800/50">
-                  <div className="accent-gradient mb-2 text-4xl font-bold md:text-5xl">
-                    {item.value}
-                  </div>
-                  <div className="mb-1 font-medium text-slate-900 dark:text-white">{item.label}</div>
-                  <div className="text-sm text-slate-400">{item.desc}</div>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-          <FadeIn>
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-8 dark:border-white/10 dark:bg-navy-800/50">
-              <div className="flex flex-col items-center gap-8 md:flex-row">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 dark:bg-linear-to-br dark:from-cyan-500/20 dark:to-purple-500/20">
-                  <Award className="text-blue-600 dark:text-cyan-400" size={40} />
-                </div>
-                <div className="flex-1">
-                  <h3 className="mb-3 text-xl font-bold text-slate-900 dark:text-white">
-                    {stats.methodTitle}
-                  </h3>
-                  <p className="mb-5 leading-relaxed text-slate-500 dark:text-slate-400">
-                    {stats.methodDesc}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {stats.methodTags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-sm text-blue-700 dark:border-cyan-500/20 dark:bg-cyan-500/10 dark:text-cyan-400"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </FadeIn>
         </div>
       </section>
 
@@ -386,6 +286,106 @@ export function HomePageView({
                   <div className="mt-1 text-sm text-slate-400">{s.label}</div>
                 </div>
               ))}
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* GEO Covers - geook style */}
+      <section className="relative py-24 dark:bg-navy-900">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <FadeIn className="mb-14 text-center">
+            <div className="mb-3 text-sm font-semibold tracking-wide text-blue-600 uppercase dark:text-cyan-400">
+              {servicesSection.badge}
+            </div>
+            <h2 className="mb-4 text-3xl font-bold text-slate-900 md:text-5xl dark:text-white">
+              {servicesSection.title}
+            </h2>
+            <p className="mx-auto max-w-3xl text-lg text-slate-500 dark:text-slate-400">
+              {servicesSection.subtitle}
+            </p>
+          </FadeIn>
+
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {servicesSection.covers.map((cover, idx) => (
+              <FadeIn key={cover.title} delay={idx * 0.05}>
+                <div className="h-full rounded-2xl border border-slate-200 bg-slate-50 p-7 transition hover:-translate-y-1 hover:border-blue-300 hover:shadow-xl dark:border-white/10 dark:bg-navy-800/50 dark:hover:border-cyan-400/40">
+                  <div className="mb-3 text-sm font-bold text-blue-600 dark:text-cyan-400">
+                    0{idx + 1}
+                  </div>
+                  <h3 className="mb-3 text-xl font-bold text-slate-900 dark:text-white">
+                    {cover.title}
+                  </h3>
+                  <p className="mb-5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                    {cover.description}
+                  </p>
+                  <ul className="space-y-2">
+                    {cover.features.map((f) => (
+                      <li
+                        key={f}
+                        className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400"
+                      >
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue-500 dark:text-cyan-400" />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Stats */}
+      <section className="py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-14 text-center">
+            <h2 className="mb-4 text-3xl font-bold text-slate-900 md:text-5xl dark:text-white">
+              {stats.titleBefore}{" "}
+              <span className="accent-gradient">{stats.titleHighlight}</span>{" "}
+              {stats.titleAfter}
+            </h2>
+            <p className="text-lg text-slate-500 dark:text-slate-400">{stats.subtitle}</p>
+          </div>
+          <div className="mb-12 grid grid-cols-2 gap-6 md:grid-cols-4">
+            {stats.items.map((item, idx) => (
+              <FadeIn key={item.label} delay={idx * 0.05}>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center dark:border-white/5 dark:bg-navy-800/50">
+                  <div className="accent-gradient mb-2 text-4xl font-bold md:text-5xl">
+                    {item.value}
+                  </div>
+                  <div className="mb-1 font-medium text-slate-900 dark:text-white">{item.label}</div>
+                  <div className="text-sm text-slate-400">{item.desc}</div>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+          <FadeIn>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-8 dark:border-white/10 dark:bg-navy-800/50">
+              <div className="flex flex-col items-center gap-8 md:flex-row">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 dark:bg-linear-to-br dark:from-cyan-500/20 dark:to-purple-500/20">
+                  <Award className="text-blue-600 dark:text-cyan-400" size={40} />
+                </div>
+                <div className="flex-1">
+                  <h3 className="mb-3 text-xl font-bold text-slate-900 dark:text-white">
+                    {stats.methodTitle}
+                  </h3>
+                  <p className="mb-5 leading-relaxed text-slate-500 dark:text-slate-400">
+                    {stats.methodDesc}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {stats.methodTags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-sm text-blue-700 dark:border-cyan-500/20 dark:bg-cyan-500/10 dark:text-cyan-400"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </FadeIn>
         </div>
