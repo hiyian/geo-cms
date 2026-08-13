@@ -1,8 +1,25 @@
 import { NextResponse } from "next/server";
-import { createSession, verifyAdmin } from "@/lib/auth";
+import {
+  attachSessionCookie,
+  createSessionToken,
+  verifyAdmin,
+} from "@/lib/auth";
 
 export async function POST(request: Request) {
   try {
+    if (!process.env.DATABASE_URL) {
+      return NextResponse.json(
+        { error: "服务器未配置 DATABASE_URL" },
+        { status: 500 },
+      );
+    }
+    if (!process.env.AUTH_SECRET) {
+      return NextResponse.json(
+        { error: "服务器未配置 AUTH_SECRET" },
+        { status: 500 },
+      );
+    }
+
     const body = await request.json();
     const username = String(body.username || "").trim();
     const password = String(body.password || "");
@@ -12,9 +29,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "用户名或密码错误" }, { status: 401 });
     }
 
-    await createSession(user.id, user.username);
-    return NextResponse.json({ ok: true });
-  } catch {
-    return NextResponse.json({ error: "登录失败" }, { status: 500 });
+    const token = await createSessionToken(user.id, user.username);
+    const response = NextResponse.json({ ok: true });
+    return attachSessionCookie(response, token);
+  } catch (error) {
+    console.error("login failed:", error);
+    return NextResponse.json(
+      {
+        error: "登录失败",
+        detail: error instanceof Error ? error.message : "unknown",
+      },
+      { status: 500 },
+    );
   }
 }

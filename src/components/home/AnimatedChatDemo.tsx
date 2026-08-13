@@ -85,139 +85,143 @@ export function AnimatedChatDemo({ demos, autoPlayMs = 9000 }: Props) {
           </div>
         </div>
 
-        <div className="min-h-[420px] space-y-4 p-5">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={scene.id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              className="space-y-4"
-            >
-              {step >= 1 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="flex justify-end"
-                >
-                  <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-linear-to-r from-cyan-600 to-blue-600 px-4 py-3 text-white shadow-lg">
-                    <p className="text-sm leading-relaxed">{scene.userMessage}</p>
-                  </div>
-                </motion.div>
-              )}
-
-              {step >= 2 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="flex gap-3"
-                >
-                  <div
-                    className={cn(
-                      "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br",
-                      accent,
-                    )}
+        <div className="flex h-[420px] flex-col">
+          <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-5 pb-3">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={scene.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
+                className="space-y-4"
+              >
+                {step >= 1 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="flex justify-end"
                   >
-                    <Bot className="h-5 w-5 text-white" />
-                  </div>
-                  <div className="flex-1 rounded-2xl rounded-tl-sm border border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-white/5">
-                    <p className="mb-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-                      {scene.aiIntro}
-                    </p>
-                    <div className="mb-3 space-y-2.5">
-                      {scene.items.map((item, idx) => {
-                        const visible = step >= 3 + idx;
-                        if (!visible) return null;
-                        return item.highlight ? (
-                          <motion.div
-                            key={`${scene.id}-${item.rank}`}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.4 }}
-                            className="relative overflow-hidden"
-                          >
-                            <div className="flex items-start gap-3 rounded-xl border border-cyan-400/30 bg-linear-to-r from-cyan-500/15 to-purple-500/10 p-3">
-                              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-linear-to-r from-cyan-400 to-blue-500 text-xs font-bold text-white">
+                    <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-linear-to-r from-cyan-600 to-blue-600 px-4 py-3 text-white shadow-lg">
+                      <p className="text-sm leading-relaxed">{scene.userMessage}</p>
+                    </div>
+                  </motion.div>
+                )}
+
+                {step >= 2 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="flex gap-3"
+                  >
+                    <div
+                      className={cn(
+                        "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br",
+                        accent,
+                      )}
+                    >
+                      <Bot className="h-5 w-5 text-white" />
+                    </div>
+                    <div className="flex-1 rounded-2xl rounded-tl-sm border border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-white/5">
+                      <p className="mb-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                        {scene.aiIntro}
+                      </p>
+                      <div className="mb-3 space-y-2.5">
+                        {scene.items.map((item, idx) => {
+                          const visible = step >= 3 + idx;
+                          if (!visible) return null;
+                          return item.highlight ? (
+                            <motion.div
+                              key={`${scene.id}-${item.rank}`}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ duration: 0.4 }}
+                              className="relative overflow-hidden"
+                            >
+                              <div className="flex items-start gap-3 rounded-xl border border-cyan-400/30 bg-linear-to-r from-cyan-500/15 to-purple-500/10 p-3">
+                                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-linear-to-r from-cyan-400 to-blue-500 text-xs font-bold text-white">
+                                  {item.rank}
+                                </div>
+                                <div className="flex-1">
+                                  <div className="mb-1 flex items-center gap-2">
+                                    <span className="text-sm font-bold text-cyan-600 dark:text-cyan-400">
+                                      {item.name}
+                                    </span>
+                                    {item.badge ? (
+                                      <span className="rounded bg-cyan-400/20 px-1.5 py-0.5 text-[10px] text-cyan-700 dark:text-cyan-300">
+                                        {item.badge}
+                                      </span>
+                                    ) : null}
+                                  </div>
+                                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                                    {item.tags}
+                                  </p>
+                                </div>
+                                <CheckCircle2 className="h-5 w-5 shrink-0 text-cyan-500 dark:text-cyan-400" />
+                              </div>
+                              <div className="pointer-events-none absolute inset-0 rounded-xl bg-linear-to-r from-cyan-400/5 to-transparent" />
+                            </motion.div>
+                          ) : (
+                            <motion.div
+                              key={`${scene.id}-${item.rank}`}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ duration: 0.4 }}
+                              className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white/60 p-3 dark:border-white/5 dark:bg-white/3"
+                            >
+                              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-400 text-xs font-medium text-white dark:bg-slate-600">
                                 {item.rank}
                               </div>
                               <div className="flex-1">
-                                <div className="mb-1 flex items-center gap-2">
-                                  <span className="text-sm font-bold text-cyan-600 dark:text-cyan-400">
-                                    {item.name}
-                                  </span>
-                                  {item.badge ? (
-                                    <span className="rounded bg-cyan-400/20 px-1.5 py-0.5 text-[10px] text-cyan-700 dark:text-cyan-300">
-                                      {item.badge}
-                                    </span>
-                                  ) : null}
-                                </div>
-                                <p className="text-xs text-slate-500 dark:text-slate-400">
-                                  {item.tags}
-                                </p>
+                                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                                  {item.name}
+                                </span>
+                                <p className="text-xs text-slate-500">{item.tags}</p>
                               </div>
-                              <CheckCircle2 className="h-5 w-5 shrink-0 text-cyan-500 dark:text-cyan-400" />
-                            </div>
-                            <div className="pointer-events-none absolute inset-0 rounded-xl bg-linear-to-r from-cyan-400/5 to-transparent" />
-                          </motion.div>
-                        ) : (
-                          <motion.div
-                            key={`${scene.id}-${item.rank}`}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.4 }}
-                            className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white/60 p-3 dark:border-white/5 dark:bg-white/3"
-                          >
-                            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-400 text-xs font-medium text-white dark:bg-slate-600">
-                              {item.rank}
-                            </div>
-                            <div className="flex-1">
-                              <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                                {item.name}
-                              </span>
-                              <p className="text-xs text-slate-500">{item.tags}</p>
-                            </div>
-                          </motion.div>
-                        );
-                      })}
+                            </motion.div>
+                          );
+                        })}
+                      </div>
+                      {step >= 6 && (
+                        <motion.p
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ duration: 0.35 }}
+                          className="border-t border-slate-200 pt-3 text-xs text-slate-500 dark:border-white/5 dark:text-slate-400"
+                        >
+                          {scene.footerNote}
+                        </motion.p>
+                      )}
                     </div>
-                    {step >= 6 && (
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.35 }}
-                        className="border-t border-slate-200 pt-3 text-xs text-slate-500 dark:border-white/5 dark:text-slate-400"
-                      >
-                        {scene.footerNote}
-                      </motion.p>
-                    )}
-                  </div>
-                </motion.div>
-              )}
-            </motion.div>
-          </AnimatePresence>
+                  </motion.div>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
-          <div className="mt-4 flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-white/3">
-            <span className="flex-1 text-sm text-slate-500">输入消息...</span>
-            <div className="flex gap-1.5">
-              {demos.map((d, idx) => (
-                <button
-                  key={d.id}
-                  type="button"
-                  aria-label={`切换场景 ${idx + 1}`}
-                  onClick={() => setActive(idx)}
-                  className={cn(
-                    "h-2 rounded-full transition-all duration-300",
-                    idx === active
-                      ? "w-4 bg-cyan-400"
-                      : "w-2 bg-slate-300 hover:bg-slate-400 dark:bg-slate-600 dark:hover:bg-slate-500",
-                  )}
-                />
-              ))}
+          <div className="shrink-0 border-t border-slate-100 bg-white/90 px-5 py-3 dark:border-white/5 dark:bg-navy-900/90">
+            <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-white/3">
+              <span className="flex-1 text-sm text-slate-500">输入消息...</span>
+              <div className="flex gap-1.5">
+                {demos.map((d, idx) => (
+                  <button
+                    key={d.id}
+                    type="button"
+                    aria-label={`切换场景 ${idx + 1}`}
+                    onClick={() => setActive(idx)}
+                    className={cn(
+                      "h-2 rounded-full transition-all duration-300",
+                      idx === active
+                        ? "w-4 bg-cyan-400"
+                        : "w-2 bg-slate-300 hover:bg-slate-400 dark:bg-slate-600 dark:hover:bg-slate-500",
+                    )}
+                  />
+                ))}
+              </div>
+              <ArrowRight className="h-5 w-5 text-slate-400 dark:text-slate-600" />
             </div>
-            <ArrowRight className="h-5 w-5 text-slate-400 dark:text-slate-600" />
           </div>
         </div>
       </div>
