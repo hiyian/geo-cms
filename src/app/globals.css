@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --navy-950: #020617;
+  --navy-900: #0a1628;
+  --navy-800: #0f2137;
+  --navy-700: #16304d;
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --primary-light: #60a5fa;
+  --brand-accent: #8b5cf6;
+  --page-bg: #ffffff;
+  --page-fg: #0f172a;
+  --muted: #64748b;
+  --surface: #f8fafc;
+  --border: rgba(15, 23, 42, 0.08);
+}
+
+.dark {
+  --primary: #64ffda;
+  --primary-hover: #52e6c4;
+  --primary-light: #8fffe5;
+  --brand-accent: #a78bfa;
+  --page-bg: #0a1628;
+  --page-fg: #e2e8f0;
+  --muted: #94a3b8;
+  --surface: #0f2137;
+  --border: rgba(255, 255, 255, 0.08);
+}
+
+@theme inline {
+  --color-background: var(--page-bg);
+  --color-foreground: var(--page-fg);
+  --color-navy-950: var(--navy-950);
+  --color-navy-900: var(--navy-900);
+  --color-navy-800: var(--navy-800);
+  --color-navy-700: var(--navy-700);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-light: var(--primary-light);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--page-bg);
+  color: var(--muted);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--primary) 35%, transparent);
+  color: var(--page-bg);
+}
+
+.accent-gradient {
+  background: linear-gradient(to right, var(--primary), var(--brand-accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.admin-input {
+  @apply w-full rounded-lg border border-white/10 bg-navy-900 px-3 py-2 text-sm text-white outline-none transition focus:border-cyan-400/50;
+}
+
+.admin-label {
+  @apply mb-1.5 block text-sm text-slate-400;
+}
+
+.admin-card {
+  @apply rounded-2xl border border-white/10 bg-navy-800/60 p-5;
+}
+
+.admin-btn {
+  @apply inline-flex items-center justify-center rounded-lg bg-cyan-500 px-4 py-2 text-sm font-semibold text-navy-900 transition hover:bg-cyan-400 disabled:opacity-50;
+}
+
+.admin-btn-ghost {
+  @apply inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200 transition hover:bg-white/10;
+}
