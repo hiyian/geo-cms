@@ -27,10 +27,10 @@ export async function POST(request: Request) {
 
     await prisma.pageContent.upsert({
       where: { slug: "leads-inbox" },
-      update: { data: JSON.stringify(leads), title: "预约记录" },
+      update: { data: JSON.stringify(leads), title: "询盘" },
       create: {
         slug: "leads-inbox",
-        title: "预约记录",
+        title: "询盘",
         data: JSON.stringify(leads),
       },
     });

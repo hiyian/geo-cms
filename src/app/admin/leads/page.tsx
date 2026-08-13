@@ -17,11 +17,11 @@ export default async function AdminLeadsPage() {
 
   return (
     <div>
-      <h1 className="mb-2 text-3xl font-bold text-white">预约记录</h1>
-      <p className="mb-8 text-slate-500">来自联系页的预约表单提交</p>
+      <h1 className="mb-2 text-3xl font-bold text-white">询盘</h1>
+      <p className="mb-8 text-slate-500">来自联系页的表单提交</p>
 
       {leads.length === 0 ? (
-        <div className="admin-card text-slate-500">暂无预约记录</div>
+        <div className="admin-card text-slate-500">暂无询盘</div>
       ) : (
         <div className="space-y-3">
           {leads.map((lead) => (

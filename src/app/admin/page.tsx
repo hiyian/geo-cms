@@ -19,7 +19,7 @@ export default async function AdminDashboardPage() {
     { label: "案例", value: cases, href: "/admin/cases" },
     { label: "博客", value: posts, href: "/admin/blog" },
     { label: "FAQ", value: faqs, href: "/admin/faqs" },
-    { label: "预约记录", value: leads.length, href: "/admin/leads" },
+    { label: "询盘", value: leads.length, href: "/admin/leads" },
   ];
 
   return (
