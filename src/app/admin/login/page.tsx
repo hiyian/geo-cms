@@ -36,7 +36,7 @@ export default function AdminLoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-navy-950 px-4">
       <div className="w-full max-w-md rounded-2xl border border-white/10 bg-navy-900 p-8 shadow-2xl">
         <h1 className="mb-2 text-2xl font-bold text-white">GeoCMS 后台登录</h1>
-        <p className="mb-8 text-sm text-slate-500">管理营销站内容与线索</p>
+        <p className="mb-8 text-sm text-slate-500">管理营销站内容与预约记录</p>
         <form onSubmit={onSubmit} className="space-y-4">
           <div>
             <label className="admin-label">用户名</label>

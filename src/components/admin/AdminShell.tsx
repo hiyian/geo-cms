@@ -13,7 +13,7 @@ const nav = [
   { href: "/admin/cases", label: "案例" },
   { href: "/admin/blog", label: "博客" },
   { href: "/admin/faqs", label: "FAQ" },
-  { href: "/admin/leads", label: "线索" },
+  { href: "/admin/leads", label: "预约记录" },
 ];
 
 export function AdminShell({
