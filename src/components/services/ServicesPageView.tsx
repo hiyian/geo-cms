@@ -12,11 +12,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { FadeIn } from "@/components/site/FadeIn";
-import {
-  servicesPageBlocks,
-  servicesPageHero,
-  type ServiceBlock,
-} from "@/data/services-page";
+import type { ServiceBlock, ServicesPageHero } from "@/lib/types";
 
 const DIAGNOSIS_METRICS = [
   {
@@ -498,12 +494,35 @@ function DiagnosisSection({ block }: { block: ServiceBlock }) {
   );
 }
 
-export function ServicesPageView() {
-  const diagnosis = servicesPageBlocks.find((b) => b.layout === "diagnosis")!;
-  const social = servicesPageBlocks.find((b) => b.layout === "social")!;
-  const geo = servicesPageBlocks.find((b) => b.layout === "geo")!;
-  const authority = servicesPageBlocks.find((b) => b.layout === "authority")!;
+function DefaultVisual() {
+  return (
+    <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-10 text-center dark:border-white/15 dark:bg-navy-800/50">
+      <Sparkles className="mx-auto mb-3 h-8 w-8 text-blue-500 dark:text-cyan-400" />
+      <p className="text-sm text-slate-500 dark:text-slate-400">服务示意模块</p>
+    </div>
+  );
+}
 
+function visualForLayout(layout: ServiceBlock["layout"]) {
+  switch (layout) {
+    case "social":
+      return <SocialVisual />;
+    case "geo":
+      return <GeoVisual />;
+    case "authority":
+      return <AuthorityVisual />;
+    default:
+      return <DefaultVisual />;
+  }
+}
+
+export function ServicesPageView({
+  hero,
+  blocks,
+}: {
+  hero: ServicesPageHero;
+  blocks: ServiceBlock[];
+}) {
   return (
     <div className="bg-white transition-colors dark:bg-navy-900">
       <section className="relative overflow-hidden pt-32 pb-16">
@@ -511,24 +530,33 @@ export function ServicesPageView() {
         <div className="relative z-10 mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <FadeIn>
             <div className="mb-4 text-sm font-semibold tracking-wide text-blue-600 dark:text-cyan-400">
-              {servicesPageHero.eyebrow}
+              {hero.eyebrow}
             </div>
             <h1 className="mb-6 text-4xl font-bold text-slate-900 md:text-6xl dark:text-white">
-              {servicesPageHero.titleBefore}{" "}
-              <span className="accent-gradient">{servicesPageHero.titleHighlight}</span>
+              {hero.titleBefore}{" "}
+              <span className="accent-gradient">{hero.titleHighlight}</span>
             </h1>
             <p className="mx-auto max-w-3xl text-lg text-slate-500 md:text-xl dark:text-slate-400">
-              {servicesPageHero.subtitle}
+              {hero.subtitle}
             </p>
           </FadeIn>
         </div>
       </section>
 
       <div className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
-        <DiagnosisSection block={diagnosis} />
-        <SplitService block={social} visual={<SocialVisual />} />
-        <SplitService block={geo} reverse visual={<GeoVisual />} />
-        <SplitService block={authority} visual={<AuthorityVisual />} />
+        {blocks.map((block) => {
+          if (block.layout === "diagnosis") {
+            return <DiagnosisSection key={block.id} block={block} />;
+          }
+          return (
+            <SplitService
+              key={block.id}
+              block={block}
+              reverse={block.layout === "geo"}
+              visual={visualForLayout(block.layout)}
+            />
+          );
+        })}
       </div>
     </div>
   );

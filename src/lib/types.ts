@@ -143,3 +143,42 @@ export type ContactPageData = {
   formTitle: string;
   successMessage: string;
 };
+
+export type ServiceLayout = "diagnosis" | "social" | "geo" | "authority" | "default";
+
+export type ServiceDetail = {
+  layout: ServiceLayout;
+  scenariosTitle?: string;
+  scenarios?: string[];
+  contentsTitle?: string;
+  promiseTitle?: string;
+  promise?: string;
+  dimensions?: string[];
+  reportItems?: string[];
+  ctaText?: string;
+};
+
+export type ServiceBlock = {
+  id: string;
+  badge?: string;
+  title: string;
+  summary: string;
+  scenariosTitle?: string;
+  scenarios?: string[];
+  contentsTitle: string;
+  contents: string[];
+  promiseTitle?: string;
+  promise?: string;
+  layout: ServiceLayout;
+  dimensions?: string[];
+  reportItems?: string[];
+  ctaText?: string;
+  ctaHref?: string;
+};
+
+export type ServicesPageHero = {
+  eyebrow: string;
+  titleBefore: string;
+  titleHighlight: string;
+  subtitle: string;
+};

@@ -1,33 +1,17 @@
-export type ServiceBlock = {
-  id: string;
-  badge?: string;
-  title: string;
-  summary: string;
-  scenariosTitle?: string;
-  scenarios?: string[];
-  contentsTitle: string;
-  contents: string[];
-  promiseTitle?: string;
-  promise?: string;
-  layout: "diagnosis" | "social" | "geo" | "authority";
-  /** diagnosis only */
-  dimensions?: string[];
-  reportItems?: string[];
-  ctaText?: string;
-  ctaHref?: string;
-};
+import type { ServiceBlock, ServicesPageHero } from "@/lib/types";
 
-export const servicesPageHero = {
+export const defaultServicesPageHero: ServicesPageHero = {
   eyebrow: "1. 服务体系",
   titleBefore: "我们的",
   titleHighlight: "核心服务",
   subtitle: "从社媒搜索到AI引擎，为您提供全域搜索优化解决方案",
 };
 
-export const servicesPageBlocks: ServiceBlock[] = [
+/** Default blocks used by seed + empty DB fallback */
+export const defaultServicesPageBlocks: ServiceBlock[] = [
   {
     id: "diagnosis",
-    badge: "🎁 免费获取",
+    badge: "免费获取",
     title: "GEO诊断报告",
     summary:
       "8维度量化评分，在豆包、Kimi、DeepSeek等7大主流AI平台进行真实测试，一键生成专业诊断报告。让优化有据可依，而非模糊的“改进建议”。",
@@ -120,3 +104,17 @@ export const servicesPageBlocks: ServiceBlock[] = [
     ctaHref: "/contact",
   },
 ];
+
+export function blockToServiceDetail(block: ServiceBlock) {
+  return {
+    layout: block.layout,
+    scenariosTitle: block.scenariosTitle,
+    scenarios: block.scenarios || [],
+    contentsTitle: block.contentsTitle,
+    promiseTitle: block.promiseTitle,
+    promise: block.promise,
+    dimensions: block.dimensions || [],
+    reportItems: block.reportItems || [],
+    ctaText: block.ctaText,
+  };
+}

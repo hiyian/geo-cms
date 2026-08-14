@@ -49,6 +49,8 @@ model Service {
   summary     String
   description String
   features    String
+  /// Rich service-page fields: layout / scenarios / dimensions / promise / ctaText ...
+  detail      String   @default("{}")
   accent      String   @default("cyan")
   badge       String   @default("")
   href        String   @default("/contact")

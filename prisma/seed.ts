@@ -1,6 +1,11 @@
 import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import {
+  blockToServiceDetail,
+  defaultServicesPageBlocks,
+  defaultServicesPageHero,
+} from "../src/data/services-page";
 import type { AboutPageData, ContactPageData, HomePageData } from "../src/lib/types";
 
 const prisma = new PrismaClient();
@@ -389,77 +394,30 @@ async function main() {
     },
   });
 
+  await prisma.pageContent.upsert({
+    where: { slug: "services" },
+    update: { data: JSON.stringify(defaultServicesPageHero) },
+    create: {
+      slug: "services",
+      title: "服务页",
+      data: JSON.stringify(defaultServicesPageHero),
+    },
+  });
+
   await prisma.service.deleteMany();
   await prisma.service.createMany({
-    data: [
-      {
-        title: "GEO诊断报告",
-        summary:
-          "8维度量化评分，在豆包、Kimi、DeepSeek等7大主流AI平台进行真实测试，一键生成专业诊断报告。",
-        description:
-          "首次合作客户可免费获取基础版GEO诊断报告，了解品牌现状后再制定针对性方案。",
-        features: JSON.stringify([
-          "网络搜索覆盖度 / 社媒平台渗透率",
-          "内容结构化程度 / 权威背书强度",
-          "品牌所有权清晰度 / AI可见度指数",
-          "AI引用率 / 内容更新频率",
-          "竞品AI引用对比与优化建议书",
-        ]),
-        accent: "yellow",
-        badge: "免费获取",
-        href: "/contact",
-        sortOrder: 1,
-      },
-      {
-        title: "社媒搜索优化",
-        summary:
-          "通过素人内容矩阵策略，帮助品牌在小红书、抖音等平台击穿目标关键词。",
-        description:
-          "长尾词7天内实现搜索前排覆盖；大词根据竞争度制定专属方案。",
-        features: JSON.stringify([
-          "关键词调研与竞争分析",
-          "素人账号矩阵搭建",
-          "内容策划与批量生产",
-          "搜索排名监测与优化",
-        ]),
-        accent: "purple",
-        badge: "",
-        href: "/contact",
-        sortOrder: 2,
-      },
-      {
-        title: "GEO生成式引擎优化",
-        summary:
-          "帮助品牌进入豆包、Kimi、DeepSeek等AI平台的推荐名单，提升AI可见度。",
-        description:
-          "业内首创AI实测评估体系；数据驱动，每月复测量化效果。",
-        features: JSON.stringify([
-          "AI可见度诊断（豆包/Kimi/DeepSeek实测）",
-          "竞品AI对标分析",
-          "结构化内容矩阵建设",
-        ]),
-        accent: "cyan",
-        badge: "核心服务",
-        href: "/contact",
-        sortOrder: 3,
-      },
-      {
-        title: "权威背书建设",
-        summary:
-          "通过百科创建、媒体报道等方式构建品牌数字资产，提升知识图谱权重。",
-        description: "不成功不收费，确保百科词条成功上线，媒体报道真实可查。",
-        features: JSON.stringify([
-          "百度/搜狗/头条百科创建",
-          "权威新闻媒体报道",
-          "知乎高权重问答布局",
-          "行业榜单入围策划",
-        ]),
-        accent: "blue",
-        badge: "",
-        href: "/contact",
-        sortOrder: 4,
-      },
-    ],
+    data: defaultServicesPageBlocks.map((block, idx) => ({
+      title: block.title,
+      summary: block.summary,
+      description: block.promise || "",
+      features: JSON.stringify(block.contents),
+      detail: JSON.stringify(blockToServiceDetail(block)),
+      accent: ["yellow", "purple", "cyan", "blue"][idx] || "cyan",
+      badge: block.badge || "",
+      href: block.ctaHref || "/contact",
+      sortOrder: idx + 1,
+      published: true,
+    })),
   });
 
   await prisma.faq.deleteMany();
