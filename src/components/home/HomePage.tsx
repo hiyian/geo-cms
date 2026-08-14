@@ -197,20 +197,22 @@ export function HomePageView({
                 <div
                   className={`relative flex flex-col items-center rounded-xl p-4 text-center ${
                     item.current
-                      ? "scale-105 border border-blue-300 bg-blue-50 dark:border-cyan-500/30 dark:bg-linear-to-b dark:from-cyan-500/20 dark:to-purple-500/10"
+                      ? "scale-105 border border-blue-300 bg-blue-50 shadow-sm dark:border-cyan-300/50 dark:bg-navy-900/80 dark:shadow-[0_0_24px_rgba(34,211,238,0.18)]"
                       : "border border-transparent bg-slate-50 dark:bg-white/2"
                   }`}
                 >
                   <div
                     className={`mb-3 h-4 w-4 rounded-full ${
                       item.current
-                        ? "animate-pulse bg-linear-to-r from-cyan-400 to-purple-500 ring-4 ring-cyan-400/30"
+                        ? "animate-pulse bg-linear-to-r from-cyan-300 to-violet-400 ring-4 ring-cyan-300/40"
                         : "bg-linear-to-r from-blue-400 to-blue-600"
                     }`}
                   />
                   <div
                     className={`text-2xl font-black ${
-                      item.current ? "accent-gradient" : "text-slate-900 dark:text-white"
+                      item.current
+                        ? "bg-linear-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent dark:from-cyan-300 dark:to-violet-300"
+                        : "text-slate-900 dark:text-white"
                     }`}
                   >
                     {item.year}
@@ -218,15 +220,23 @@ export function HomePageView({
                   <div
                     className={`mt-1 text-sm font-bold ${
                       item.current
-                        ? "text-blue-600 dark:text-cyan-400"
+                        ? "text-blue-700 dark:text-cyan-200"
                         : "text-slate-600 dark:text-slate-300"
                     }`}
                   >
                     {item.title}
                   </div>
-                  <div className="mt-1 text-xs text-slate-400">{item.subtitle}</div>
+                  <div
+                    className={`mt-1 text-xs ${
+                      item.current
+                        ? "text-slate-500 dark:text-slate-300"
+                        : "text-slate-400"
+                    }`}
+                  >
+                    {item.subtitle}
+                  </div>
                   {item.current && (
-                    <div className="absolute -top-2 -right-2 rounded-full bg-linear-to-r from-blue-500 to-violet-500 px-2 py-0.5 text-[10px] font-bold text-white">
+                    <div className="absolute -top-2 -right-2 rounded-full bg-linear-to-r from-blue-500 to-violet-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-md dark:from-cyan-400 dark:to-violet-400 dark:text-navy-900">
                       NOW
                     </div>
                   )}
@@ -252,21 +262,26 @@ export function HomePageView({
         <div className="relative z-10 mx-auto max-w-6xl px-4 text-center sm:px-6 lg:px-8">
           <FadeIn y={30}>
             <h2 className="mb-8 text-3xl leading-tight font-bold text-slate-900 md:text-5xl dark:text-white">
-              当用户问AI
-              <span className="mx-2 inline-block rounded-xl border border-blue-200 bg-blue-50 px-4 py-1 dark:border-cyan-400/30 dark:bg-cyan-500/10">
-                <span className="accent-gradient font-black">
-                  &quot;{migration.quotePrompt}&quot;
+              <span className="block">
+                当用户问AI
+                <span className="mx-2 inline-block rounded-xl border border-blue-200 bg-blue-50 px-4 py-1 dark:border-cyan-400/30 dark:bg-cyan-500/10">
+                  <span className="accent-gradient font-black">
+                    &quot;{migration.quotePrompt}&quot;
+                  </span>
                 </span>
+                时，
               </span>
-              {migration.titleMiddle}
-              <span className="mx-2 bg-linear-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">
-                {migration.recommend}
+              <span className="mt-2 block md:mt-3">
+                您的品牌是
+                <span className="mx-2 bg-linear-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">
+                  {migration.recommend}
+                </span>
+                ，还是
+                <span className="mx-2 bg-linear-to-r from-red-500 to-orange-500 bg-clip-text text-transparent line-through">
+                  {migration.invisible}
+                </span>
+                ？
               </span>
-              ，还是
-              <span className="mx-2 bg-linear-to-r from-red-500 to-orange-500 bg-clip-text text-transparent line-through">
-                {migration.invisible}
-              </span>
-              ？
             </h2>
             <p className="mb-10 text-xl text-slate-500 dark:text-slate-400">{migration.subtitle}</p>
             <div className="mb-12 flex flex-wrap justify-center gap-4">
