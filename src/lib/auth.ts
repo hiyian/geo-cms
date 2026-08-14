@@ -6,13 +6,33 @@ import { prisma } from "./db";
 
 const COOKIE_NAME = "geocms_session";
 
-const cookieOptions = {
-  httpOnly: true,
-  sameSite: "lax" as const,
-  secure: process.env.NODE_ENV === "production",
-  path: "/",
-  maxAge: 60 * 60 * 24 * 7,
-};
+function sessionCookieOptions(secure?: boolean) {
+  // HTTP (宝塔 :8080) 不能用 Secure，否则浏览器不存 Cookie，登录后会被踢回登录页
+  const useSecure =
+    typeof secure === "boolean"
+      ? secure
+      : process.env.COOKIE_SECURE === "true" ||
+        process.env.COOKIE_SECURE === "1";
+
+  return {
+    httpOnly: true,
+    sameSite: "lax" as const,
+    secure: useSecure,
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7,
+  };
+}
+
+/** Detect https from proxy headers or request URL. */
+export function isHttpsRequest(request: Request) {
+  const forwarded = request.headers.get("x-forwarded-proto");
+  if (forwarded) return forwarded.split(",")[0].trim() === "https";
+  try {
+    return new URL(request.url).protocol === "https:";
+  } catch {
+    return false;
+  }
+}
 
 function getSecret() {
   const secret = process.env.AUTH_SECRET;
@@ -39,15 +59,19 @@ export async function createSessionToken(userId: string, username: string) {
 }
 
 /** Prefer setting cookies on the NextResponse in Route Handlers. */
-export function attachSessionCookie(response: NextResponse, token: string) {
-  response.cookies.set(COOKIE_NAME, token, cookieOptions);
+export function attachSessionCookie(
+  response: NextResponse,
+  token: string,
+  secure = false,
+) {
+  response.cookies.set(COOKIE_NAME, token, sessionCookieOptions(secure));
   return response;
 }
 
 export async function createSession(userId: string, username: string) {
   const token = await createSessionToken(userId, username);
   const cookieStore = await cookies();
-  cookieStore.set(COOKIE_NAME, token, cookieOptions);
+  cookieStore.set(COOKIE_NAME, token, sessionCookieOptions(false));
 }
 
 export async function destroySession() {
@@ -55,8 +79,11 @@ export async function destroySession() {
   cookieStore.delete(COOKIE_NAME);
 }
 
-export function clearSessionCookie(response: NextResponse) {
-  response.cookies.set(COOKIE_NAME, "", { ...cookieOptions, maxAge: 0 });
+export function clearSessionCookie(response: NextResponse, secure = false) {
+  response.cookies.set(COOKIE_NAME, "", {
+    ...sessionCookieOptions(secure),
+    maxAge: 0,
+  });
   return response;
 }
 

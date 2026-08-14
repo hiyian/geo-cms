@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import {
   attachSessionCookie,
   createSessionToken,
+  isHttpsRequest,
   verifyAdmin,
 } from "@/lib/auth";
 
@@ -31,7 +32,7 @@ export async function POST(request: Request) {
 
     const token = await createSessionToken(user.id, user.username);
     const response = NextResponse.json({ ok: true });
-    return attachSessionCookie(response, token);
+    return attachSessionCookie(response, token, isHttpsRequest(request));
   } catch (error) {
     console.error("login failed:", error);
     return NextResponse.json(
