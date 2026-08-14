@@ -50,6 +50,25 @@ export async function verifyAdmin(username: string, password: string) {
   return user;
 }
 
+export async function changeAdminPassword(
+  userId: string,
+  currentPassword: string,
+  newPassword: string,
+) {
+  const user = await prisma.adminUser.findUnique({ where: { id: userId } });
+  if (!user) return { ok: false as const, error: "user_not_found" };
+
+  const matched = await bcrypt.compare(currentPassword, user.passwordHash);
+  if (!matched) return { ok: false as const, error: "invalid_current" };
+
+  const passwordHash = await bcrypt.hash(newPassword, 10);
+  await prisma.adminUser.update({
+    where: { id: userId },
+    data: { passwordHash },
+  });
+  return { ok: true as const };
+}
+
 export async function createSessionToken(userId: string, username: string) {
   return new SignJWT({ sub: userId, username })
     .setProtectedHeader({ alg: "HS256" })
