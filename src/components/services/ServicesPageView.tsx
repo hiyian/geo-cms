@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import {
   ArrowRight,
   CheckCircle2,
@@ -16,6 +17,29 @@ import {
   servicesPageHero,
   type ServiceBlock,
 } from "@/data/services-page";
+
+const DIAGNOSIS_METRICS = [
+  {
+    label: "网络搜索",
+    value: 85,
+    tip: "官网与资讯源覆盖较好，可持续巩固长尾词入口。",
+  },
+  {
+    label: "社媒渗透",
+    value: 72,
+    tip: "社媒种草内容有基础，建议加强素人矩阵与话题覆盖。",
+  },
+  {
+    label: "AI可见度",
+    value: 45,
+    tip: "AI推荐表现偏弱，优先补齐结构化问答与实体信息。",
+  },
+  {
+    label: "权威背书",
+    value: 68,
+    tip: "百科与媒体资产可继续沉淀，提升知识图谱权重。",
+  },
+] as const;
 
 function PromiseBox({
   title,
@@ -34,9 +58,49 @@ function PromiseBox({
   );
 }
 
-function DiagnosisVisual() {
+function AnimatedScore({ value }: { value: number }) {
+  const motionValue = useMotionValue(0);
+  const spring = useSpring(motionValue, { stiffness: 80, damping: 18 });
+  const display = useTransform(spring, (v) => Math.round(v));
+  const [text, setText] = useState("0");
+
+  useEffect(() => {
+    const unsub = display.on("change", (v) => setText(String(v)));
+    motionValue.set(value);
+    return unsub;
+  }, [display, motionValue, value]);
+
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-xl shadow-blue-500/5 dark:border-white/10 dark:bg-navy-800/80 dark:shadow-cyan-500/5">
+    <motion.div
+      className="accent-gradient text-6xl font-black leading-none"
+      initial={{ opacity: 0, scale: 0.85 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+    >
+      {text}
+    </motion.div>
+  );
+}
+
+function DiagnosisVisual() {
+  const [active, setActive] = useState(0);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    if (!inView) return;
+    const timer = window.setInterval(() => {
+      setActive((prev) => (prev + 1) % DIAGNOSIS_METRICS.length);
+    }, 2600);
+    return () => window.clearInterval(timer);
+  }, [inView]);
+
+  return (
+    <motion.div
+      className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-xl shadow-blue-500/5 dark:border-white/10 dark:bg-navy-800/80 dark:shadow-cyan-500/5"
+      onViewportEnter={() => setInView(true)}
+      viewport={{ once: true, amount: 0.4 }}
+    >
       <div className="mb-5 flex items-center justify-between">
         <div>
           <div className="text-sm font-semibold text-slate-900 dark:text-white">
@@ -50,7 +114,7 @@ function DiagnosisVisual() {
       </div>
 
       <div className="mb-6 flex items-end gap-4">
-        <div className="accent-gradient text-6xl font-black leading-none">78</div>
+        <AnimatedScore value={78} />
         <div className="pb-1">
           <div className="text-sm font-bold text-slate-900 dark:text-white">
             GEO综合评分
@@ -60,29 +124,104 @@ function DiagnosisVisual() {
       </div>
 
       <div className="space-y-3">
-        {[
-          { label: "网络搜索", value: 85 },
-          { label: "社媒渗透", value: 72 },
-          { label: "AI可见度", value: 45 },
-          { label: "权威背书", value: 68 },
-        ].map((row) => (
-          <div key={row.label}>
-            <div className="mb-1 flex justify-between text-xs">
-              <span className="text-slate-500 dark:text-slate-400">{row.label}</span>
-              <span className="font-semibold text-slate-700 dark:text-slate-200">
-                {row.value}
-              </span>
+        {DIAGNOSIS_METRICS.map((row, idx) => {
+          const isActive = active === idx;
+          return (
+            <motion.button
+              key={row.label}
+              type="button"
+              onClick={() => setActive(idx)}
+              className={`w-full rounded-xl px-2 py-2 text-left transition ${
+                isActive
+                  ? "bg-blue-50 ring-1 ring-blue-200 dark:bg-cyan-500/10 dark:ring-cyan-500/30"
+                  : "hover:bg-slate-50 dark:hover:bg-white/5"
+              }`}
+              initial={{ opacity: 0, x: 12 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.15 + idx * 0.08, duration: 0.4 }}
+            >
+              <div className="mb-1 flex justify-between text-xs">
+                <span
+                  className={
+                    isActive
+                      ? "font-semibold text-blue-700 dark:text-cyan-300"
+                      : "text-slate-500 dark:text-slate-400"
+                  }
+                >
+                  {row.label}
+                </span>
+                <motion.span
+                  className="font-semibold text-slate-700 dark:text-slate-200"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                >
+                  {row.value}
+                </motion.span>
+              </div>
+              <div className="h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-white/10">
+                <motion.div
+                  className={`h-full rounded-full bg-linear-to-r from-blue-500 to-violet-500 ${
+                    isActive ? "shadow-[0_0_12px_rgba(59,130,246,0.55)]" : ""
+                  }`}
+                  initial={{ width: 0 }}
+                  animate={{
+                    width: inView ? `${row.value}%` : 0,
+                    filter: isActive
+                      ? ["brightness(1)", "brightness(1.25)", "brightness(1)"]
+                      : "brightness(1)",
+                  }}
+                  transition={{
+                    width: {
+                      delay: 0.25 + idx * 0.12,
+                      duration: 0.9,
+                      ease: [0.22, 1, 0.36, 1],
+                    },
+                    filter: { duration: 1.6, repeat: isActive ? Infinity : 0 },
+                  }}
+                />
+              </div>
+            </motion.button>
+          );
+        })}
+      </div>
+
+      <div className="relative mt-4 min-h-14 overflow-hidden rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-navy-900/50">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={DIAGNOSIS_METRICS[active].label}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.28 }}
+          >
+            <div className="mb-1 text-xs font-bold text-blue-600 dark:text-cyan-400">
+              {DIAGNOSIS_METRICS[active].label} · {DIAGNOSIS_METRICS[active].value}分
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-white/10">
-              <div
-                className="h-full rounded-full bg-linear-to-r from-blue-500 to-violet-500"
-                style={{ width: `${row.value}%` }}
-              />
-            </div>
-          </div>
+            <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+              {DIAGNOSIS_METRICS[active].tip}
+            </p>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      <div className="mt-3 flex justify-center gap-1.5">
+        {DIAGNOSIS_METRICS.map((row, idx) => (
+          <button
+            key={row.label}
+            type="button"
+            aria-label={`切换到${row.label}`}
+            onClick={() => setActive(idx)}
+            className={`h-1.5 rounded-full transition-all ${
+              active === idx
+                ? "w-5 bg-blue-500 dark:bg-cyan-400"
+                : "w-1.5 bg-slate-300 dark:bg-white/20"
+            }`}
+          />
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -248,6 +387,17 @@ function SplitService({
 }
 
 function DiagnosisSection({ block }: { block: ServiceBlock }) {
+  const [dimActive, setDimActive] = useState(0);
+  const dimensions = block.dimensions || [];
+
+  useEffect(() => {
+    if (!dimensions.length) return;
+    const timer = window.setInterval(() => {
+      setDimActive((prev) => (prev + 1) % dimensions.length);
+    }, 2200);
+    return () => window.clearInterval(timer);
+  }, [dimensions.length]);
+
   return (
     <section className="rounded-3xl border border-slate-200 bg-slate-50 p-6 md:p-10 dark:border-white/10 dark:bg-navy-800/40">
       <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-14">
@@ -265,20 +415,41 @@ function DiagnosisSection({ block }: { block: ServiceBlock }) {
             {block.summary}
           </p>
 
-          {block.dimensions?.length ? (
+          {dimensions.length ? (
             <div className="mb-8">
               <h3 className="mb-4 text-sm font-bold tracking-wide text-slate-900 uppercase dark:text-white">
                 {block.contentsTitle}
               </h3>
               <div className="grid grid-cols-2 gap-3">
-                {block.dimensions.map((d) => (
-                  <div
-                    key={d}
-                    className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm text-slate-700 dark:border-white/10 dark:bg-navy-900/60 dark:text-slate-300"
-                  >
-                    {d}
-                  </div>
-                ))}
+                {dimensions.map((d, idx) => {
+                  const isActive = dimActive === idx;
+                  return (
+                    <motion.button
+                      key={d}
+                      type="button"
+                      onClick={() => setDimActive(idx)}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: idx * 0.05, duration: 0.35 }}
+                      animate={
+                        isActive
+                          ? {
+                              scale: 1.03,
+                              borderColor: "rgba(59,130,246,0.55)",
+                            }
+                          : { scale: 1 }
+                      }
+                      className={`rounded-xl border px-3 py-3 text-left text-sm transition ${
+                        isActive
+                          ? "border-blue-300 bg-blue-50 text-blue-800 shadow-sm dark:border-cyan-400/40 dark:bg-cyan-500/10 dark:text-cyan-200"
+                          : "border-slate-200 bg-white text-slate-700 dark:border-white/10 dark:bg-navy-900/60 dark:text-slate-300"
+                      }`}
+                    >
+                      {d}
+                    </motion.button>
+                  );
+                })}
               </div>
             </div>
           ) : null}
@@ -289,14 +460,18 @@ function DiagnosisSection({ block }: { block: ServiceBlock }) {
                 报告包含内容
               </h3>
               <ul className="space-y-2">
-                {block.reportItems.map((item) => (
-                  <li
+                {block.reportItems.map((item, idx) => (
+                  <motion.li
                     key={item}
                     className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-300"
+                    initial={{ opacity: 0, x: -8 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.1 + idx * 0.06 }}
                   >
                     <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue-500 dark:text-cyan-400" />
                     {item}
-                  </li>
+                  </motion.li>
                 ))}
               </ul>
             </div>
